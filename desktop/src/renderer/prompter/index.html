@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; media-src 'self'">
+<title>Textream Prompter</title>
+<link rel="stylesheet" href="../shared/fonts.css">
+<link rel="stylesheet" href="prompter.css">
+</head>
+<body>
+<div id="shell" class="shell">
+  <div id="island" class="island">
+    <header id="topbar" class="topbar">
+      <span class="grip" aria-hidden="true"></span>
+      <span id="page-label" class="page-label"></span>
+      <span id="elapsed" class="elapsed">0:00</span>
+    </header>
+
+    <main id="viewport" class="viewport" aria-live="off">
+      <div id="flip" class="flip">
+        <div id="column" class="column">
+          <div id="words" class="words"></div>
+        </div>
+        <div id="marker" class="marker" aria-hidden="true"></div>
+      </div>
+      <div id="done" class="done" hidden>
+        <div class="done-check">✓</div>
+        <div id="done-label" class="done-label">Done!</div>
+        <button id="done-next" class="pill" type="button" hidden>Next page</button>
+      </div>
+      <div id="countdown" class="countdown" hidden></div>
+      <div id="waiting" class="waiting" hidden>
+        <span class="pulse-dot" aria-hidden="true"></span>
+        <span>Waiting for the script…</span>
+      </div>
+    </main>
+
+    <footer id="controls" class="controls">
+      <div id="wave" class="wave" aria-hidden="true"></div>
+      <div id="status" class="status"></div>
+      <div class="buttons">
+        <button id="prev" class="ibtn" type="button" title="Previous page" hidden>
+          <svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
+        </button>
+        <button id="next" class="ibtn" type="button" title="Next page" hidden>
+          <svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+        <button id="slower" class="ibtn big-only" type="button" title="Slower (↓)">
+          <svg viewBox="0 0 24 24"><path d="M6 12h12"/></svg>
+        </button>
+        <span id="speed" class="speed big-only"></span>
+        <button id="faster" class="ibtn big-only" type="button" title="Faster (↑)">
+          <svg viewBox="0 0 24 24"><path d="M6 12h12M12 6v12"/></svg>
+        </button>
+        <button id="restart" class="ibtn big-only" type="button" title="Back to start (Home)">
+          <svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4v4.5h4.5"/></svg>
+        </button>
+        <button id="pause" class="ibtn" type="button" title="Pause (Space)">
+          <svg class="i-pause" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14"/></svg>
+          <svg class="i-play" viewBox="0 0 24 24"><path class="fill" d="M7 4.5v15l13-7.5z"/></svg>
+          <svg class="i-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+          <svg class="i-mic-off" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M4 4l16 16"/></svg>
+        </button>
+        <button id="stop" class="ibtn" type="button" title="Stop (Esc)">
+          <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+    </footer>
+  </div>
+</div>
+<script src="prompter.js"></script>
+</body>
+</html>

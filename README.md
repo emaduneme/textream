@@ -42,6 +42,10 @@ brew install textream
 
 > Requires **macOS 15 Sequoia** or later. Works on Apple Silicon and Intel.
 
+### Windows and Linux (Electron, preview)
+
+An Electron port in [`desktop/`](desktop/README.md) brings the same overlay, guidance modes, remote viewer and Director Mode to Windows and Linux. Word tracking runs offline with sherpa-onnx.
+
 ## iOS 26 Companion
 
 The Textream companion for iPhone and iPad is part of the same universal App Store listing as the Mac app.
