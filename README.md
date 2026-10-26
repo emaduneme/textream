@@ -5,7 +5,7 @@
 <h1 align="center">Textream</h1>
 
 <p align="center">
-  <strong>A free teleprompter for Mac, Windows, Linux, iPhone, and iPad.</strong>
+  <strong>A free teleprompter for Mac, iPhone, and iPad.</strong>
 </p>
 
 <p align="center">
@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <a href="#download">Download</a> · <a href="#windows-and-linux-electron-preview">Windows &amp; Linux</a> · <a href="#ios-26-companion">iPhone &amp; iPad</a> · <a href="#features">Features</a> · <a href="#how-it-works">How It Works</a> · <a href="#building-from-source">Build</a> · <a href="https://textream.net/privacy.html">Privacy</a>
+  <a href="#download">Download</a> · <a href="#ios-26-companion">iPhone &amp; iPad</a> · <a href="#features">Features</a> · <a href="#how-it-works">How It Works</a> · <a href="#building-from-source">Build</a> · <a href="https://textream.net/privacy.html">Privacy</a>
 </p>
 
 <p align="center">
@@ -24,7 +24,7 @@
 
 ## What is Textream?
 
-Textream is a free, open-source teleprompter that guides you through your script with three modes: **word tracking** (highlights each word as you say it), **classic** (constant-speed auto-scroll), and **voice-activated** (scrolls while you speak, pauses when you're silent). The Mac app displays your text in a sleek **Dynamic Island-style overlay**, a **draggable floating window**, or **fullscreen on a Sidecar iPad**. The iPhone and iPad app adds near-camera reading and presenter-only camera recording. A preview Electron app brings the same overlay to Windows and Linux.
+Textream is a free, open-source teleprompter that guides you through your script with three modes: **word tracking** (highlights each word as you say it), **classic** (constant-speed auto-scroll), and **voice-activated** (scrolls while you speak, pauses when you're silent). The Mac app displays your text in a sleek **Dynamic Island-style overlay**, a **draggable floating window**, or **fullscreen on a Sidecar iPad**. The iPhone and iPad app adds near-camera reading and presenter-only camera recording.
 
 Paste your script, hit play, and start speaking. When you're done, the overlay closes automatically.
 
@@ -42,21 +42,9 @@ brew install textream
 
 > Requires **macOS 15 Sequoia** or later. Works on Apple Silicon and Intel.
 
-### Windows and Linux (Electron, preview)
+### Windows and Linux
 
-An Electron port in [`desktop/`](desktop/README.md) brings the same overlay, guidance modes, remote viewer and Director Mode to Windows and Linux. Word tracking runs offline with sherpa-onnx.
-
-To download a build:
-
-1. Open the **[Textream Desktop (preview) release](https://github.com/emaduneme/textream/releases/tag/desktop-latest)**. It always holds the newest build.
-2. Under **Assets**, download `Textream-Setup-….exe` for Windows, the `.dmg` for an Apple silicon Mac, or the `.AppImage` for Linux.
-3. Run it. The builds are unsigned, so on Windows SmartScreen warns you: choose **More info**, then **Run anyway**.
-
-Bluetooth presentation remotes, mini game remotes in music or game mode, and keyboard media keys can pause, move by line, and change speed. See [`desktop/README.md`](desktop/README.md#bluetooth-remotes).
-
-On first use of Word Tracking, the app asks you to download a speech model once. After that it works offline.
-
-> Requires **Windows 10** or later (64-bit), or a 64-bit Linux desktop.
+[Glass Prompter Desktop](https://github.com/emaduneme/glass-prompter#desktop-app-windows-mac-linux) is an Electron port of Textream for Windows and Linux, with offline word tracking, the same overlay modes, the remote viewer and Director Mode. **[Download it here](https://github.com/emaduneme/glass-prompter/releases/tag/desktop-latest).**
 
 ## iOS 26 Companion
 
