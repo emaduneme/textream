@@ -209,9 +209,10 @@
     wordsEl.style.transform = `translate3d(0, ${Math.round((y - target) * 10) / 10}px, 0)`;
   }
 
-  function loop() {
+  function loop(now) {
     raf = requestAnimationFrame(loop);
     if (!content.highlightWords) position(false);
+    pollGamepads(now || performance.now());
   }
 
   // ---------------------------------------------------------------- chrome
@@ -283,6 +284,52 @@
     if (tick.startedAt) $('elapsed').textContent = fmt(Date.now() - tick.startedAt);
   }, 500);
 
+  // ---------------------------------------------------------------- remote
+
+  const perLine = () => Math.max(1, Math.round(lines.length ? spans.length / lines.length : 6));
+
+  /// Remote buttons: forward and back move one line; the rest go to main.
+  function remote(cmd) {
+    if (cmd === 'forward') api.control('scrollBy', perLine());
+    else if (cmd === 'back') api.control('scrollBy', -perLine());
+    else api.control('remote', cmd);
+    showHud();
+  }
+  api.onRemote(remote);
+
+  // Bluetooth remotes in game mode show up as gamepads. Only the overlay
+  // (the window that also captures audio) polls, so a second display never
+  // handles the same press twice. Standard mapping: A or Start pauses,
+  // B goes back a line, X and Y change page, the stick or D-pad moves by
+  // line (left/right) and changes speed (up/down).
+  const PAD_BUTTONS = { 0: 'toggle', 9: 'toggle', 1: 'back', 2: 'previousPage', 3: 'nextPage', 12: 'faster', 13: 'slower', 14: 'back', 15: 'forward' };
+  const padState = new Map();
+  let remoteEnabled = true;
+
+  function pollGamepads(now) {
+    if (!capture || !remoteEnabled || !navigator.getGamepads) return;
+    for (const pad of navigator.getGamepads()) {
+      if (!pad || !pad.connected) continue;
+      const state = padState.get(pad.index) || { buttons: [], axis: null, axisAt: 0 };
+      pad.buttons.forEach((b, i) => {
+        const pressed = !!(b && b.pressed);
+        if (pressed && !state.buttons[i] && PAD_BUTTONS[i]) remote(PAD_BUTTONS[i]);
+        state.buttons[i] = pressed;
+      });
+      const [x = 0, y = 0] = pad.axes;
+      let dir = null;
+      if (Math.abs(x) > 0.6 && Math.abs(x) >= Math.abs(y)) dir = x > 0 ? 'forward' : 'back';
+      else if (Math.abs(y) > 0.6) dir = y < 0 ? 'faster' : 'slower';
+      // Fire on push, then repeat while held.
+      if (dir && (dir !== state.axis || now - state.axisAt > 350)) {
+        remote(dir);
+        state.axisAt = now;
+      }
+      state.axis = dir;
+      padState.set(pad.index, state);
+    }
+  }
+
   // ---------------------------------------------------------------- input
 
   if (interactive) {
@@ -322,15 +369,15 @@
     $('restart').addEventListener('click', () => api.control('restartPage'));
 
     document.addEventListener('keydown', (e) => {
-      const perLine = Math.max(1, Math.round(lines.length ? spans.length / lines.length : 6));
       const k = e.key;
       let handled = true;
-      if (k === ' ' || k === 'MediaPlayPause') api.control('togglePause');
+      // Enter covers remotes in key mode, whose main button sends it.
+      if (k === ' ' || k === 'MediaPlayPause' || (k === 'Enter' && !e.target.closest('button'))) api.control('togglePause');
       else if (k === 'Escape') api.control('stop');
       else if (k === 'ArrowUp') api.control('speed', 0.5);
       else if (k === 'ArrowDown') api.control('speed', -0.5);
-      else if (k === 'ArrowRight' || k === 'PageDown') api.control('scrollBy', perLine);
-      else if (k === 'ArrowLeft' || k === 'PageUp') api.control('scrollBy', -perLine);
+      else if (k === 'ArrowRight' || k === 'PageDown') remote('forward');
+      else if (k === 'ArrowLeft' || k === 'PageUp') remote('back');
       else if (k === 'Home') api.control('restartPage');
       else if (k === ']') api.control('nextPage');
       else if (k === '[') api.control('previousPage');
@@ -454,6 +501,7 @@
   api.initPrompter().then((init) => {
     platform = init.platform;
     micIdSetting = init.settings.selectedMicId || '';
+    remoteEnabled = init.settings.remoteControl !== false;
     style = init.style;
     tick = init.tick;
     onContent(init.content);

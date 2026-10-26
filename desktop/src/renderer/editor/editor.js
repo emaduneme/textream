@@ -51,6 +51,7 @@
       { custom: 'mic', show: () => s.listeningMode !== 'classic' },
       { key: 'autoNextPage', type: 'check', label: 'Go to the next page automatically' },
       { key: 'autoNextPageDelay', type: 'seg', label: 'Countdown before the next page', options: [[0, 'None'], [1, '1 s'], [3, '3 s'], [5, '5 s']], show: () => s.autoNextPage },
+      { key: 'remoteControl', type: 'check', label: 'Bluetooth remote and media keys', note: () => 'Pair the remote with your computer first. Music mode: play/pause pauses, next/previous track moves a line, volume changes speed (Classic and Voice-Activated only). Game mode: A or Start pauses, the stick moves by line and changes speed, X and Y change page.' },
     ] },
     { id: 'overlay', label: 'Overlay', fields: [
       { key: 'overlayMode', type: 'seg', label: 'Show the prompter as', options: [['pinned', 'Pinned to top'], ['floating', 'Floating'], ['fullscreen', 'Fullscreen']], note: (v) => OVERLAY_NOTES[v] },

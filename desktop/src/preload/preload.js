@@ -40,4 +40,5 @@ contextBridge.exposeInMainWorld('textream', {
   onContent: listen('content'),
   onTick: listen('tick'),
   onStyle: listen('style'),
+  onRemote: listen('remote'),
 });

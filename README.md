@@ -48,10 +48,11 @@ An Electron port in [`desktop/`](desktop/README.md) brings the same overlay, gui
 
 To download a build:
 
-1. Open the **[Desktop (Electron) workflow](https://github.com/emaduneme/textream/actions/workflows/desktop.yml)** and choose the latest green run.
-2. Under **Artifacts**, download **textream-desktop-Windows** (or **-Linux** / **-macOS**). You need to be signed in to GitHub.
-3. Unzip it and run the installer: the `.exe` on Windows, the `.AppImage` on Linux.
-4. The builds are unsigned. On Windows, SmartScreen warns you: choose **More info**, then **Run anyway**.
+1. Open the **[Textream Desktop (preview) release](https://github.com/emaduneme/textream/releases/tag/desktop-latest)**. It always holds the newest build.
+2. Under **Assets**, download `Textream-Setup-….exe` for Windows, the `.dmg` for an Apple silicon Mac, or the `.AppImage` for Linux.
+3. Run it. The builds are unsigned, so on Windows SmartScreen warns you: choose **More info**, then **Run anyway**.
+
+Bluetooth presentation remotes, mini game remotes in music or game mode, and keyboard media keys can pause, move by line, and change speed. See [`desktop/README.md`](desktop/README.md#bluetooth-remotes).
 
 On first use of Word Tracking, the app asks you to download a speech model once. After that it works offline.
 

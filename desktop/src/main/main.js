@@ -295,6 +295,7 @@ function applyLiveSettings(changed) {
   const style = viewStyle(settings.all());
   broadcastToViews('style', style);
   if (!session.active) return;
+  if (changed.includes('remoteControl')) registerSessionShortcuts();
   if (changed.includes('hideFromScreenShare')) {
     for (const w of prompterWindows()) w.setContentProtection(!!settings.get('hideFromScreenShare'));
   }
@@ -406,6 +407,31 @@ function registerSessionShortcuts() {
   add('CommandOrControl+Shift+.', () => session.stop());
   add('CommandOrControl+Shift+Right', () => session.nextPage());
   add('CommandOrControl+Shift+Left', () => session.previousPage());
+  if (settings.get('remoteControl')) {
+    // Bluetooth remotes in music mode (and keyboard media keys) send these.
+    add('MediaPlayPause', () => remoteCommand('toggle'));
+    add('MediaNextTrack', () => remoteCommand('forward'));
+    add('MediaPreviousTrack', () => remoteCommand('back'));
+    // Volume becomes speed only where speed matters, so word tracking
+    // leaves the system volume alone.
+    if (session.mode !== 'wordTracking') {
+      add('VolumeUp', () => remoteCommand('faster'));
+      add('VolumeDown', () => remoteCommand('slower'));
+    }
+  }
+}
+
+/// One entry point for remote buttons: media keys, gamepads, clickers.
+/// Line moves need the overlay's layout, so the overlay turns them into
+/// word counts.
+function remoteCommand(cmd) {
+  if (!session.active) return;
+  if (cmd === 'toggle') session.togglePause();
+  else if (cmd === 'faster') session.changeSpeed(0.5);
+  else if (cmd === 'slower') session.changeSpeed(-0.5);
+  else if (cmd === 'nextPage') session.nextPage();
+  else if (cmd === 'previousPage') session.previousPage();
+  else if (cmd === 'forward' || cmd === 'back') sendTo(overlayWindow, 'remote', cmd);
 }
 
 function wireSession() {
@@ -664,7 +690,7 @@ function wireIpc() {
     content: lastContent || session.content(),
     tick: lastTick || session.snapshot(),
     style: viewStyle(settings.all()),
-    settings: { selectedMicId: settings.get('selectedMicId') },
+    settings: { selectedMicId: settings.get('selectedMicId'), remoteControl: settings.get('remoteControl') },
     platform: process.platform,
   }));
   ipcMain.on('prompter:control', (e, cmd, arg) => {
@@ -677,6 +703,7 @@ function wireIpc() {
       case 'restartPage': session.restartPage(); break;
       case 'speed': if (Number.isFinite(arg)) session.changeSpeed(arg); break;
       case 'stop': session.stop(); break;
+      case 'remote': if (typeof arg === 'string') remoteCommand(arg); break;
       default: break;
     }
   });
@@ -808,7 +835,7 @@ app.whenReady().then(async () => {
   for (const t of [...targetsFromArgv(process.argv), ...pendingOpen]) await handleOpenTarget(t);
   pendingOpen = [];
 
-  if (TEST_MODE) global.textream = { session, speech, settings, doc, startReading, lanStatus: () => lanStatus };
+  if (TEST_MODE) global.textream = { session, speech, settings, doc, startReading, remoteCommand, lanStatus: () => lanStatus };
 });
 
 app.on('activate', () => {

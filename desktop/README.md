@@ -43,6 +43,27 @@ On Linux as root (containers), add `-- --no-sandbox`.
 
 On macOS, Ctrl is Cmd.
 
+## Bluetooth remotes
+
+Small Bluetooth remotes work as a hands-free controller. That includes the mini "VR" game remotes with a joystick, START and four buttons, presentation clickers, and keyboard media keys. Pair the remote with your computer in Bluetooth settings first. Turn this on or off in Settings → Guidance → **Bluetooth remote and media keys**. It is on by default.
+
+| Remote mode | Button | Action |
+|---|---|---|
+| Music / media | Play/pause (START on most mini remotes) | Pause (Classic) or mute (voice modes) |
+| Music / media | Next / previous track (joystick right / left) | Move one line forward / back |
+| Music / media | Volume up / down (joystick up / down) | Faster / slower. Classic and Voice-Activated only; in Word Tracking the volume keys keep controlling volume. |
+| Game (gamepad) | A or Start | Pause or mute |
+| Game (gamepad) | Stick or D-pad left / right | Move one line back / forward |
+| Game (gamepad) | Stick or D-pad up / down | Faster / slower |
+| Game (gamepad) | B | Move one line back |
+| Game (gamepad) | X / Y | Previous / next page |
+| Key / clicker | Enter or Space | Pause or mute |
+| Key / clicker | → / ← or Page Down / Page Up | Move one line forward / back |
+
+Media keys work from any app while you read. Gamepad and key buttons reach the prompter window, so they are most reliable in Fullscreen or with the floating window focused. Music mode is the most dependable choice for the pinned bar.
+
+Mini remotes pick their mode with a button combination at power-on or a mode switch. Many use START + @ (or a side switch) for key mode, START + X for music mode, and a GAME switch for game mode, but models differ: check the label or manual for yours.
+
 ## Tests
 
 ```bash
@@ -60,7 +81,7 @@ npm run dist:mac    # .dmg
 npm run dist:linux  # AppImage
 ```
 
-The `Desktop (Electron)` GitHub workflow runs the tests and builds unsigned installers for all three platforms on every push that touches `desktop/`. Download them from the run's artifacts.
+The `Desktop (Electron)` GitHub workflow runs the tests and builds unsigned installers for all three platforms on every push that touches `desktop/`. It then replaces the `desktop-latest` pre-release on the repository's Releases page with the new installers.
 
 Unsigned builds show a warning on first launch: on Windows, SmartScreen ("More info" → "Run anyway"); on macOS, Gatekeeper (right-click → Open).
 

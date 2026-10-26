@@ -57,6 +57,7 @@ const DEFAULTS = {
   hideFromScreenShare: true,
   showElapsedTime: true,
   keepScreenAwake: false,
+  remoteControl: true,
   readingPosition: 'centered',
   showParagraphDividers: false,
   showLastSpokenWords: true,

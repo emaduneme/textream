@@ -159,6 +159,35 @@ test('pages advance and the session reports the page', async () => {
   await main(() => global.textream.session.stop());
 });
 
+test('remote buttons pause, move by line, change speed, and work as a gamepad', async () => {
+  await main(() => global.textream.settings.set({ listeningMode: 'classic', scrollSpeed: 3 }));
+  await main(() => global.textream.startReading(0));
+  const view = await overlay();
+  const state = () => main(() => ({ paused: global.textream.session.paused, charCount: global.textream.session.charCount, speed: global.textream.settings.get('scrollSpeed') }));
+
+  // Music mode: media keys arrive as remote commands.
+  await main(() => global.textream.remoteCommand('toggle'));
+  expect((await state()).paused).toBe(true);
+  const before = (await state()).charCount;
+  await main(() => global.textream.remoteCommand('forward'));
+  await expect.poll(async () => (await state()).charCount).toBeGreaterThan(before + 10);
+  await main(() => global.textream.remoteCommand('faster'));
+  expect((await state()).speed).toBe(3.5);
+
+  // Game mode: a fake gamepad. Press A to resume, push the stick down to slow.
+  await view.evaluate(() => {
+    const pad = { index: 0, connected: true, axes: [0, 0], buttons: Array.from({ length: 16 }, () => ({ pressed: false })) };
+    window.__pad = pad;
+    navigator.getGamepads = () => [pad];
+  });
+  await view.evaluate(() => { window.__pad.buttons[0].pressed = true; });
+  await expect.poll(async () => (await state()).paused).toBe(false);
+  await view.evaluate(() => { window.__pad.buttons[0].pressed = false; window.__pad.axes = [0, 1]; });
+  await expect.poll(async () => (await state()).speed).toBeLessThan(3.5);
+  await view.evaluate(() => { window.__pad.axes = [0, 0]; });
+  await main(() => global.textream.session.stop());
+});
+
 test('fullscreen mode fills the display', async () => {
   await main(() => global.textream.settings.set({ listeningMode: 'classic', overlayMode: 'fullscreen' }));
   await main(() => global.textream.startReading(0));

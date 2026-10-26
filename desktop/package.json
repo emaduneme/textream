@@ -59,7 +59,8 @@
       "target": [
         "nsis"
       ],
-      "icon": "assets/icon.png"
+      "icon": "assets/icon.png",
+      "artifactName": "Textream-Setup-${version}.${ext}"
     },
     "nsis": {
       "oneClick": false,
@@ -73,14 +74,16 @@
       "category": "public.app-category.productivity",
       "extendInfo": {
         "NSMicrophoneUsageDescription": "Textream listens to your voice to follow your script while you read."
-      }
+      },
+      "artifactName": "Textream-${version}-${arch}.${ext}"
     },
     "linux": {
       "target": [
         "AppImage"
       ],
       "icon": "assets/icon.png",
-      "category": "Utility"
+      "category": "Utility",
+      "artifactName": "Textream-${version}-${arch}.${ext}"
     }
   }
 }
